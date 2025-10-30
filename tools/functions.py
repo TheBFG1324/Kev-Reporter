@@ -61,7 +61,7 @@ async def get_google_news_context(cve: str, timeout: int = 10) -> Optional[str]:
     try:
         resp = await asyncio.to_thread(requests.get, url, headers=headers, params=params, timeout=timeout)
         resp.raise_for_status()
-        return resp.text
+        return resp.text[:500]
     except Exception:
         return None
 
