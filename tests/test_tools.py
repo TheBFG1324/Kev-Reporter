@@ -1,6 +1,8 @@
 import pytest
-from tools.functions import get_mitre_cve_context, get_google_news_context, search_exploit_db, gather_context
+from dotenv import load_dotenv
+from tools.functions import get_mitre_cve_context, get_google_news_context, search_exploit_db
 
+load_dotenv()
 
 # Test mitre function
 @pytest.mark.asyncio

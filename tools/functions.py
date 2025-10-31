@@ -3,12 +3,10 @@ import asyncio
 import subprocess
 import os
 
-from dotenv import load_dotenv
 from typing import List, Optional
 from agents import function_tool
 from models.context_functions import BatchToolRequest, ContextToolResponse
 
-load_dotenv()
 
 @function_tool
 def send_email_report(report: str) -> str:
@@ -33,11 +31,12 @@ async def gather_context(context_request: BatchToolRequest) -> ContextToolRespon
         A ContextToolResponse pydantic Object
     '''
     mitre_args = context_request.mitre.cve
-    google_news_args = context_request.google_news.cve
+    google_news_args = context_request.google_news.search
     exploitdb_args = context_request.exploit_db.queries
     tags = context_request.tags
+    original_kev = context_request.kev
     mitre_resp, google_resp, exploitdb_resp = await asyncio.gather(get_mitre_cve_context(mitre_args), get_google_news_context(google_news_args), search_exploit_db(exploitdb_args))
-    context = ContextToolResponse(mitre_response=mitre_resp, google_news_response=google_resp, exploitdb_response=exploitdb_resp, tags=tags)
+    context = ContextToolResponse(mitre_response=mitre_resp, google_news_response=google_resp, exploitdb_response=exploitdb_resp, tags=tags, kev=original_kev, queries=exploitdb_args)
     return context
 
 async def get_mitre_cve_context(cve: str, timeout: int = 10) -> Optional[str]:
@@ -61,7 +60,7 @@ async def get_google_news_context(cve: str, timeout: int = 10) -> Optional[str]:
     try:
         resp = await asyncio.to_thread(requests.get, url, headers=headers, params=params, timeout=timeout)
         resp.raise_for_status()
-        return resp.text[:500]
+        return resp.text[:5000]
     except Exception:
         return None
 

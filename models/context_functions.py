@@ -7,7 +7,7 @@ class MitreArgs(BaseModel):
 
 # Required parameter for Google News tool
 class GoogleNewsArgs(BaseModel):
-    cve: str
+    search: str
 
 # Required parameters for ExploitDB tool
 class ExploitDBArgs(BaseModel):
@@ -19,10 +19,13 @@ class BatchToolRequest(BaseModel):
     google_news: GoogleNewsArgs
     exploit_db: ExploitDBArgs
     tags: List[str]
+    kev: str
 
-# Data object to hold gather_context function responses and tags
+# Data object to hold gather_context function responses, tags, queries, and original kev information
 class ContextToolResponse(BaseModel):
     mitre_response: Optional[str]
     google_news_response: Optional[str]
     exploitdb_response: Optional[List[str]]
     tags: Optional[List[str]]
+    queries: List[str]
+    kev: str
