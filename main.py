@@ -27,8 +27,8 @@ async def main():
     
     context_controller_agent_system_prompt, reporter_agent_system_prompt = load_prompts()
 
-    reporter_agent = Agent(name="Reporter Agent" , instructions=reporter_agent_system_prompt, tools=[send_email_report], model_settings=ModelSettings(tool_choice="send_email_report"), tool_use_behavior="stop_on_first_tool", model="gpt-5-mini")
-    context_controller_agent = Agent(name="Context Controller Agent", instructions=context_controller_agent_system_prompt, tools=[gather_context], handoffs=[reporter_agent], model_settings=ModelSettings(tool_choice="gather_context"), model="gpt-5-nano")
+    reporter_agent = Agent(name="Reporter Agent" , instructions=reporter_agent_system_prompt, tools=[send_email_report], model="gpt-5-mini")
+    context_controller_agent = Agent(name="Context Controller Agent", instructions=context_controller_agent_system_prompt, tools=[gather_context], handoffs=[reporter_agent], model="gpt-5-nano")
     #draw_graph(agent=context_controller_agent, filename="./docs/agent-diagram")
     print("[INFO] Agents initialized successfully. Beginning processing...\n")
 
